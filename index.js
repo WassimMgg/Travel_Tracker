@@ -49,7 +49,7 @@ app.get("/", async (req, res) => {
 
 app.post("/add", async (req, res) => {
   let country = req.body.country;
-  const results = await db.query("SELECT country_code FROM countries WHERE country_name LIKE $1", [country + '%']);
+  const results = await db.query("SELECT country_code FROM countries WHERE LOWER(country_name) LIKE $1", [ '%'+ country.toLowerCase() + '%']);
   if (!results.rows.length) {
     const result = await checkVisited();
     res.render("index.ejs", { error: "Country doesn't exist, try again", countries: result, total: result.length });
